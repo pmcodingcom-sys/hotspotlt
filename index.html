@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotspot WIFI Registration</title>
+    <title>Hotspot WIFI Registration (Realtime)</title>
+    <!-- Google Font: Kanit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -19,8 +21,11 @@
         }
     </script>
     
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -37,13 +42,18 @@
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col pb-16 md:pb-0">
 
+    <!-- Global Loader -->
     <div id="globalLoader" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-white hidden">
         <div class="animate-spin rounded-full h-12 w-12 border-4 border-indigo-500 border-t-transparent mb-4"></div>
         <p class="text-sm font-medium" id="loaderText">กำลังประมวลผล...</p>
     </div>
 
+    <!-- ==========================================
+         LAYOUT CONTAINER
+         ========================================== -->
     <div class="flex flex-1 w-full relative">
 
+        <!-- Sidebar (Desktop View Only) -->
         <aside id="sidebarMenu" class="w-64 bg-slate-900 text-slate-300 hidden md:flex flex-col fixed inset-y-0 left-0 z-30 transition-all duration-300">
             <div class="p-6 border-b border-slate-800 flex items-center gap-3">
                 <div class="p-2 bg-indigo-600 rounded-xl text-white">
@@ -56,12 +66,15 @@
             </div>
             
             <nav class="flex-1 p-4 space-y-1" id="desktopNavLinks">
-                </nav>
+                <!-- เจนเมนูด้วย JS ตามสถานะล็อกอิน -->
+            </nav>
         </aside>
 
+        <!-- Main Content Area -->
         <main id="mainContent" class="flex-1 min-h-screen transition-all duration-300 md:pl-0">
             <div class="p-4 sm:p-6 max-w-7xl mx-auto w-full">
                 
+                <!-- 1. PAGE: LANDING PAGE -->
                 <section id="page-landing" class="view-page py-8 md:py-16 flex flex-col items-center justify-center text-center">
                     <div class="max-w-2xl mx-auto px-4">
                         <div class="inline-flex p-4 bg-indigo-50 text-indigo-600 rounded-3xl mb-6 animate-pulse">
@@ -84,6 +97,7 @@
                     </div>
                 </section>
 
+                <!-- 2. PAGE: REGISTER FORM -->
                 <section id="page-register" class="view-page max-w-md mx-auto hidden">
                     <div class="bg-white rounded-2xl shadow-xl shadow-slate-100 p-6 border border-slate-100">
                         <div class="flex items-center gap-3 mb-6">
@@ -113,6 +127,7 @@
                     </div>
                 </section>
 
+                <!-- 3. PAGE: ADMIN LOGIN -->
                 <section id="page-admin-login" class="view-page max-w-md mx-auto hidden">
                     <div class="bg-white rounded-2xl shadow-xl shadow-slate-100 p-6 border border-slate-100">
                         <div class="flex items-center gap-3 mb-6">
@@ -138,6 +153,7 @@
                     </div>
                 </section>
 
+                <!-- 4. PAGE: ADMIN DASHBOARD Overview -->
                 <section id="page-admin-dashboard" class="view-page hidden space-y-6">
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
                         <div class="bg-white p-4 rounded-2xl border border-slate-100 flex items-center gap-4 shadow-sm shadow-slate-100/50">
@@ -155,10 +171,10 @@
                             </div>
                         </div>
                         <div class="bg-white p-4 rounded-2xl border border-slate-100 flex items-center gap-4 shadow-sm shadow-slate-100/50">
-                            <div class="p-3 bg-purple-50 text-purple-600 rounded-xl"><i data-lucide="shield-check" class="w-6 h-6"></i></div>
+                            <div class="p-3 bg-amber-50 text-amber-600 rounded-xl"><i data-lucide="radio" class="w-6 h-6 animate-pulse"></i></div>
                             <div>
-                                <span class="text-xs text-slate-400 block font-medium">สถานะสิทธิ์</span>
-                                <span class="text-sm font-bold text-slate-900 text-purple-600">RLS Bypass</span>
+                                <span class="text-xs text-slate-400 block font-medium">สถานะเชื่อมต่อ</span>
+                                <span class="text-xs font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mt-0.5">Realtime Live</span>
                             </div>
                         </div>
                     </div>
@@ -171,7 +187,7 @@
                         <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
                             <div>
                                 <h4 class="text-sm font-bold text-slate-900 mb-2 flex items-center gap-2"><i data-lucide="info" class="w-4 h-4 text-indigo-500"></i> แผงควบคุมด่วน</h4>
-                                <p class="text-xs text-slate-500 leading-relaxed mb-4">ระบบนี้ควบคุมฐานข้อมูลด้วย Supabase Client ผ่านสิทธิ์ RLS แบบเปิดโครงสร้างเพื่อทดสอบความเสถียรของ SPA</p>
+                                <p class="text-xs text-slate-500 leading-relaxed mb-4">ระบบเปิดฟังก์ชันเชื่อมต่อ Supabase Realtime Stream แล้ว ข้อมูลทุกหน้าจะซิงค์ตรงกันโดยไม่ต้องกด F5</p>
                             </div>
                             <div class="space-y-2">
                                 <button onclick="switchPage('admin-crud')" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs rounded-xl transition flex items-center justify-center gap-1">
@@ -182,6 +198,7 @@
                     </div>
                 </section>
 
+                <!-- 5. PAGE: ADMIN CRUD -->
                 <section id="page-admin-crud" class="view-page hidden space-y-4">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div>
@@ -212,7 +229,8 @@
                                     </tr>
                                 </thead>
                                 <tbody id="userTableBody" class="divide-y divide-slate-50 text-slate-700">
-                                    </tbody>
+                                    <!-- วนลูปข้อมูลจาก JS -->
+                                </tbody>
                             </table>
                         </div>
                         <div id="tableEmptyState" class="p-8 text-center text-slate-400 hidden">
@@ -226,9 +244,12 @@
         </main>
     </div>
 
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
     <div id="mobileBottomNav" class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 z-40 h-16 flex items-center justify-around px-2">
-        </div>
+        <!-- เมนูจะเปลี่ยนไปตามสถานะ Login ผ่าน JS -->
+    </div>
 
+    <!-- MOBILE ADMIN PANEL -->
     <div id="mobileAdminPanel" class="fixed inset-x-0 bottom-16 bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 z-30 translate-y-full transition-transform duration-300 ease-out hidden shadow-2xl">
         <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
             <span class="text-xs font-bold text-slate-400 tracking-wider uppercase">ระบบควบคุมหลังบ้าน (Admin Menu)</span>
@@ -250,6 +271,10 @@
         </div>
     </div>
 
+    <!-- ==========================================
+         MODALS
+         ========================================== -->
+    <!-- REGISTRATION SUCCESS MODAL -->
     <div id="successModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl border border-slate-100 space-y-4">
             <div class="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto animate-bounce">
@@ -257,7 +282,7 @@
             </div>
             <div class="space-y-1">
                 <h4 class="font-bold text-slate-900 text-lg">ลงทะเบียนสำเร็จเรียบร้อย!</h4>
-                <p class="text-xs text-slate-500 px-4">กรุณารอ Admin ตรวจสอบแล้วเข้าระบบใหม่อีกครั้ง สามารถใช้ Username เพื่อเชื่อมต่อเน็ต ประมาณ 10 นาที</p>
+                <p class="text-xs text-slate-500 px-4">บัญชีของคุณเปิดใช้งานในระบบ Hotspot WIFI แล้ว สามารถใช้ Username เพื่อเชื่อมต่อเน็ตได้ทันที</p>
             </div>
             <button onclick="closeSuccessModal()" class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-medium rounded-xl transition shadow-lg shadow-emerald-100">
                 ตกลง เข้าสู่หน้าหลัก
@@ -265,6 +290,7 @@
         </div>
     </div>
 
+    <!-- REGISTRATION ERROR MODAL -->
     <div id="errorModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl border border-slate-100 space-y-4">
             <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto animate-pulse">
@@ -280,6 +306,7 @@
         </div>
     </div>
 
+    <!-- CRUD Create/Update Modal -->
     <div id="crudModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl space-y-4">
             <div class="flex justify-between items-center">
@@ -308,6 +335,7 @@
         </div>
     </div>
 
+    <!-- LOGOUT CONFIRMATION MODAL -->
     <div id="logoutModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-xs w-full p-5 text-center shadow-xl space-y-4">
             <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center mx-auto">
@@ -324,6 +352,9 @@
         </div>
     </div>
 
+    <!-- ==========================================
+         JAVASCRIPT LOGIC
+         ========================================== -->
     <script>
         const SUPABASE_CONFIG = {
             url: "https://kjlzyqjhfogsfupxasen.supabase.co", 
@@ -340,7 +371,28 @@
             lucide.createIcons();
             switchPage('landing');
             refreshAppUILayout();
+            
+            // เปิดฟังก์ชัน Realtime Listener ทันทีที่หน้าเว็บเปิดขึ้นมา
+            setupRealtimeSubscription();
         });
+
+        // ========================================================
+        // NEW: ฟังก์ชันเชื่อมต่อ SUPABASE REALTIME STREAM 🚀
+        // ========================================================
+        function setupRealtimeSubscription() {
+            dbConnector
+                .channel('realtime-wifi-users')
+                .on(
+                    'postgres_changes', 
+                    { event: '*', scheme: 'public', table: 'wifi_users' }, 
+                    (payload) => {
+                        console.log('พบการเปลี่ยนแปลงข้อมูลแบบ Realtime:', payload);
+                        // เมื่อมีใคร INSERT, UPDATE, หรือ DELETE ระบบจะสั่งดึงคลังข้อมูลหลังบ้านมาอัปเดตหน้าจอแอดมินให้แบบอัตโนมัติสดๆ
+                        silentlyFetchAdminData();
+                    }
+                )
+                .subscribe();
+        }
 
         function toggleLoader(show = true, text = "กำลังประมวลผล...") {
             const loader = document.getElementById('globalLoader');
@@ -353,7 +405,6 @@
             if (show) modal.classList.remove('hidden'); else modal.classList.add('hidden');
         }
 
-        // NEW: ฟังก์ชันคุมการแสดงผลหน้าต่าง Error Modal ภาษาไทย
         function toggleErrorModal(show = true, title = "เกิดข้อผิดพลาด", msg = "") {
             const modal = document.getElementById('errorModal');
             document.getElementById('errorModalTitle').innerText = title;
@@ -476,8 +527,6 @@
                 toggleSuccessModal(true);
             } catch (err) {
                 console.error(err);
-                
-                // ดักจับรหัส Error หรือข้อความ Unique constraint ของระบบฐานข้อมูล Supabase (PostgreSQL)
                 if (err.code === '23505' || (err.message && err.message.includes('wifi_users_username_key'))) {
                     toggleErrorModal(
                         true, 
@@ -526,7 +575,15 @@
         }
         function closeLogoutModal() { toggleLogoutModal(false); }
 
+        // ฟังก์ชันดึงข้อมูลแบบมี Loader (ใช้ตอนสลับหน้าแรกๆ)
         async function fetchAndPopulateAdminData() {
+            toggleLoader(true, "กำลังโหลดคลังข้อมูลล่าสุด...");
+            await silentlyFetchAdminData();
+            toggleLoader(false);
+        }
+
+        // NEW: ฟังก์ชันอัปเดตข้อมูลเงียบๆ เบื้องหลัง (ทำงานร่วมกับ Realtime Stream โดยไม่ต้องแสดงวงล้อ Loader ให้รำคาญตา)
+        async function silentlyFetchAdminData() {
             try {
                 const { data, error } = await dbConnector
                     .from('wifi_users')
@@ -536,24 +593,31 @@
                 if (error) throw error;
                 allWifiUsers = data || [];
 
-                document.getElementById('stat-total-users').innerText = allWifiUsers.length;
+                // อัปเดตสถิติหน้าภาพรวมด่วน
+                const totalBox = document.getElementById('stat-total-users');
+                const todayBox = document.getElementById('stat-today-users');
                 
-                const todayStr = new Date().toISOString().split('T')[0];
-                const todayCount = allWifiUsers.filter(u => u.created_at && u.created_at.startsWith(todayStr)).length;
-                document.getElementById('stat-today-users').innerText = todayCount;
+                if (totalBox && todayBox) {
+                    totalBox.innerText = allWifiUsers.length;
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    const todayCount = allWifiUsers.filter(u => u.created_at && u.created_at.startsWith(todayStr)).length;
+                    todayBox.innerText = todayCount;
+                }
 
+                // สั่งเรนเดอร์ตารางและวาดกราฟทับอันเดิมทันที
                 renderUserTable();
                 initiateAnalyticsChart();
             } catch (err) {
-                console.error("Data fetching anomaly: ", err);
+                console.error("Realtime sync anomaly: ", err);
             }
         }
 
         function renderUserTable() {
             const body = document.getElementById('userTableBody');
             const emptyState = document.getElementById('tableEmptyState');
-            const keyword = document.getElementById('searchBar').value.toLowerCase().trim();
+            if (!body) return; // ป้องกันกรณีหน้าจอไม่ได้อยู่หน้าตาราง CRUD
 
+            const keyword = document.getElementById('searchBar').value.toLowerCase().trim();
             body.innerHTML = '';
             
             const filtered = allWifiUsers.filter(u => 
@@ -600,10 +664,7 @@
                     .eq('id', id);
 
                 if (error) throw error;
-                
-                allWifiUsers = allWifiUsers.filter(u => u.id !== id);
-                renderUserTable();
-                initiateAnalyticsChart();
+                // ข้อดีของ Realtime: ไม่จำเป็นต้องเขียนโค้ดลบใน Array เอง เดี๋ยว Subscription ด้านบนจะตรวจเจอและจัดการให้เองครับ
                 alert("ข้อมูลผู้ใช้งานถูกลบเรียบร้อยแล้ว");
             } catch (err) {
                 alert("ไม่สามารถทำรายการลบได้: " + err.message);
@@ -663,10 +724,8 @@
                 }
 
                 closeCrudModal();
-                await fetchAndPopulateAdminData(); 
                 alert("บันทึกฐานข้อมูลสำเร็จ");
             } catch (err) {
-                // ปรับใช้ Error ดักจับของฝั่ง Modal แอดมินด้วยเช่นกันหากเกิดกรณีใส่ค่าซ้ำ
                 if (err.code === '23505') {
                     alert(`ชื่อผู้ใช้ "${username}" ถูกใช้งานไปแล้ว กรุณาใช้ชื่ออื่น`);
                 } else {
@@ -678,8 +737,10 @@
         }
 
         function initiateAnalyticsChart() {
-            const ctx = document.getElementById('analyticsChart').getContext('2d');
-            
+            const chartCanvas = document.getElementById('analyticsChart');
+            if (!chartCanvas) return; // ป้องกันกรณีหน้าจอไม่ได้อยู่หน้าแดชบอร์ด
+
+            const ctx = chartCanvas.getContext('2d');
             const dateCounts = {};
             allWifiUsers.forEach(u => {
                 if (u.created_at) {
